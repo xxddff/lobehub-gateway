@@ -19,7 +19,7 @@ The original gateway implementations remain the protocol reference. This reposit
 | Project | Status | Description |
 | --- | --- | --- |
 | [`device-gateway-go`](./device-gateway-go/README.md) | Implemented | Device gateway for routing LobeHub device connections, status queries, tool calls, system information, and agent-run requests. |
-| [`agent-gateway-go`](./agent-gateway-go/README.md) | Placeholder | Planned Go implementation of the Agent Gateway protocol. |
+| [`agent-gateway-go`](./agent-gateway-go/README.md) | Implemented | Agent gateway for relaying browser WebSocket sessions and server-pushed agent events. |
 
 ## Architecture
 

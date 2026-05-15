@@ -19,7 +19,7 @@
 | 项目 | 状态 | 说明 |
 | --- | --- | --- |
 | [`device-gateway-go`](./device-gateway-go/README.md) | 已实现 | 设备网关，用于路由 LobeHub 设备连接、状态查询、工具调用、系统信息和 agent 运行请求。 |
-| [`agent-gateway-go`](./agent-gateway-go/README.md) | 占位 | 计划中的 Agent Gateway 协议 Go 实现。 |
+| [`agent-gateway-go`](./agent-gateway-go/README.md) | 已实现 | Agent 网关，用于中转浏览器 WebSocket 会话和服务端推送的 agent 事件流。 |
 
 ## 架构
 
