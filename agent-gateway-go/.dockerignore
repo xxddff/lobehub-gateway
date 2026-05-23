@@ -1,0 +1,7 @@
+.git
+.gitignore
+*.test
+*.out
+coverage.*
+agent-gateway-go
+agent-gateway-go-linux-*

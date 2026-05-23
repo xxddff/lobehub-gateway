@@ -1,0 +1,36 @@
+name: Sync upstream
+
+on:
+  schedule:
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Merge upstream master
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge upstream
+        run: |
+          set -euo pipefail
+          git remote add upstream https://github.com/lobehub/lobehub-gateway.git
+          git fetch --no-tags upstream master
+          git merge --no-edit upstream/master
+
+      - name: Push changes
+        run: git push origin HEAD:master
