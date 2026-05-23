@@ -1,4 +1,4 @@
-name: Build agent gateway image
+name: Build gateway images
 
 on:
   push:
@@ -15,12 +15,22 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAMESPACE: ${{ github.repository }}
 
 jobs:
   build:
-    name: Build linux/amd64 image
+    name: Build ${{ matrix.gateway }} linux/amd64 image
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - gateway: agent-gateway-go
+            context: ./agent-gateway-go
+            file: ./agent-gateway-go/Dockerfile
+          - gateway: device-gateway-go
+            context: ./device-gateway-go
+            file: ./device-gateway-go/Dockerfile
 
     steps:
       - name: Checkout
@@ -39,7 +49,9 @@ jobs:
       - name: Resolve image name
         id: image
         shell: bash
-        run: echo "name=${REGISTRY}/${IMAGE_NAME,,}" >> "$GITHUB_OUTPUT"
+        env:
+          IMAGE_NAME: ${{ matrix.gateway }}
+        run: echo "name=${REGISTRY}/${IMAGE_NAMESPACE,,}/${IMAGE_NAME,,}" >> "$GITHUB_OUTPUT"
 
       - name: Extract Docker metadata
         id: meta
@@ -55,7 +67,7 @@ jobs:
       - name: Show image tags
         run: |
           {
-            echo "### Image tags"
+            echo "### ${{ matrix.gateway }} image tags"
             echo '```'
             echo "${{ steps.meta.outputs.tags }}"
             echo '```'
@@ -64,8 +76,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          context: ./agent-gateway-go
-          file: ./agent-gateway-go/Dockerfile
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
